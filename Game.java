@@ -1,3 +1,5 @@
+import java.util.*;
+
 /**
  *  This class is the main class of the "World of Zuul" application. 
  *  "World of Zuul" is a very simple, text based adventure game.  Users 
@@ -21,6 +23,7 @@ public class Game
     private Room currentRoom;
     private Stack<Room> oldRooms = new Stack<>();
     private Player player = new Player();
+    private CommandWords commandWords = new CommandWords();
         
     /**
      * Create the game and initialise its internal map.
@@ -126,7 +129,7 @@ public class Game
             printLocationInfo();
         }
         else if (commandWord.equals("eat")) {
-            
+            System.out.println("Snickers matou sua fome");
         }
         else if (commandWord.equals("quit")) {
             wantToQuit = quit(command);
@@ -154,10 +157,10 @@ public class Game
      */
     private void printHelp() 
     {
-        System.out.println("You are lost. You are alone. You wander");
-        System.out.println("around at the university.");
+        System.out.println("Que qui pega, ze?");
+        System.out.println("BH eh nois meu fi");
         System.out.println();
-        System.out.println("Your command words are:");
+        System.out.println("Faz o seguinte entao: ", commandWords.getCommands());
         System.out.println("Go quit help");
     }
 
