@@ -93,7 +93,7 @@ public class Room {
 
     public void pickItem(String name, Item item){
         if(itensOnRoom.get(name) != null){
-            itensOnRoom.get(name).loseItem();
+            itensOnRoom.get(name).gainItem();
         }else{
             createItem(item.getDescription(), 1,name);
             int itemQtde = itensOnRoom.get(name).getQtdeItens();
@@ -103,5 +103,23 @@ public class Room {
     }
     public Item getItem(String name){
         return itensOnRoom.get(name) != null ? itensOnRoom.get(name) : null;
+    }
+    
+    public void loseItem(String name){
+        itensOnRoom.get(name).loseItem();
+        if(itensOnRoom.get(name).getQtdeItens() > 0){
+            itensOnRoom.remove(name);
+        }
+    }
+
+    public void gainItem(String name, Item item){
+        if(itensOnRoom.get(name) != null){
+            itensOnRoom.get(name).gainItem();
+        }else{
+            createItem(item.getDescription(), 1,name);
+            int a = itensOnRoom.get(name).getQtdeItens();
+            System.out.println(a);
+        }
+
     }
 }
