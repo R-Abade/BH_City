@@ -1,34 +1,34 @@
 import java.util.*;
 
 /**
- *  This class is the main class of the "World of Zuul" application. 
- *  "World of Zuul" is a very simple, text based adventure game.  Users 
- *  can walk around some scenery. That's all. It should really be extended 
+ *  This class is the main class of the "World of Zuul" application.
+ *  "World of Zuul" is a very simple, text based adventure game.  Users
+ *  can walk around some scenery. That's all. It should really be extended
  *  to make it more interesting!
- * 
+ *
  *  To play this game, create an instance of this class and call the "play"
  *  method.
- * 
+ *
  *  This main class creates and initialises all the others: it creates all
  *  rooms, creates the parser and starts the game.  It also evaluates and
  *  executes the commands that the parser returns.
- * 
+ *
  * @author  Michael Kölling and David J. Barnes
  * @version 2016.02.29
  */
 
-public class Game 
+public class Game
 {
     private Parser parser;
     private Room currentRoom;
     private Stack<Room> oldRooms = new Stack<>();
     private Player player = new Player();
     private CommandWords commandWords = new CommandWords();
-        
+       
     /**
      * Create the game and initialise its internal map.
      */
-    public Game() 
+    public Game()
     {
         createRooms();
         parser = new Parser();
@@ -40,9 +40,9 @@ public class Game
     private void createRooms()
     {
         Room mineirao, pirulito, guanabara, mangabeiras, pBandeira, pPapa, pLiberdade, escritorio, casa, motel;
-      
+     
         // create the rooms
-        mineirao = new Room("mais conhecido como gigante da Pampulha (Salao de festas do Galo DOIDO!!!)");
+        mineirao = new Room("Mais conhecido como gigante da Pampulha (Salao de festas do Galo DOIDO!!!)");
         guanabara = new Room("o parqe da familia, Guanabara, uma festa a cada dia!");
         pBandeira = new Room("belas vistas num conhecido ponto turistico");
         pPapa = new Room("amem na praça do Papa, irmaos");
@@ -52,19 +52,31 @@ public class Game
         escritorio = new Room("eu to cansado, chefe");
         casa = new Room("lar, doce lar");
         motel = new Room("isso, mais forte, yamete kudasai, ahn, ahn ahn");
-        
-        
+        SobeeDesce = new Room("Tá se perdendo no personagem!!!");
+       
         // initialise room exits
-        mineirao.setExits(guanabara, escritorio, null, null);
-        pirulito.setExits(escritorio, pLiberdade, null, null);
-        guanabara.setExits(null, mineirao, null, null);
-        pBandeira.setExits(pLiberdade, pPapa, mangabeiras, null);
-        pPapa.setExits(pBandeira, null, mangabeiras, null);
-        pLiberdade.setExits(pirulito, pBandeira, null, null);
-        mangabeiras.setExits(null, null, null, pBandeira);
-        escritorio.setExits(mineirao,pirulito , casa, null);
-        casa.setExits(motel, null, null, escritorio);
-        motel.setExits(null, casa, null, null);
+        mineirao.setExit("norte",guanabara);
+        mineirao.setExit("leste",escritorio);
+        pirulito.setExit("norte",escritorio);
+        pirulito.setExit("norte", pLiberdade);
+        guanabara.setExit("sul", mineirao);
+        pBandeira.setExit("oeste" , pLiberdade);
+        pBandeira.setExit("sul" , pPapa);
+        pBandeira.setExit("leste" , mangabeiras);
+        pPapa.setExit("norte", pBandeira);
+        pPapa.setExit("sul", mangabeiras);
+        pLiberdade.setExit("sul", pirulito);
+        pLiberdade.setExit("leste", pBandeira);
+        mangabeiras.setExit("oeste", pBandeira);
+        escritorio.setExit( "leste", casa);
+	escritorio.setExit("oeste", mineirao);
+	escritorio.setExit("sul",pirulito);
+        casa.setExit("sul", motel);
+        casa.setExit("oeste", escritorio);
+	casa.setExit("oeste",SobeeDesce);
+        motel.setExit(norte"", casa);
+	SobeeDesce.setExit("leste", casa);
+	
 
         currentRoom = casa;  // start game outside
     }
@@ -72,7 +84,7 @@ public class Game
     /**
      *  Main play routine.  Loops until end of play.
      */
-    public void play() 
+    public void play()
     {            
         printWelcome();
 
@@ -98,7 +110,7 @@ public class Game
         System.out.print("Exits: ");
         printLocationInfo();
     }
-    
+   
     private void printLocationInfo(){
         System.out.println(currentRoom.getLongDescription());
     }
@@ -108,7 +120,7 @@ public class Game
      * @param command The command to be processed.
      * @return true If the command ends the game, false otherwise.
      */
-    private boolean processCommand(Command command) 
+    private boolean processCommand(Command command)
     {
         boolean wantToQuit = false;
 
@@ -152,10 +164,10 @@ public class Game
 
     /**
      * Print out some help information.
-     * Here we print some stupid, cryptic message and a list of the 
+     * Here we print some stupid, cryptic message and a list of the
      * command words.
      */
-    private void printHelp() 
+    private void printHelp()
     {
         System.out.println("Que qui pega, ze?");
         System.out.println("BH eh nois meu fi");
@@ -164,11 +176,11 @@ public class Game
         System.out.println("Go quit help");
     }
 
-    /** 
+    /**
      * Try to go in one direction. If there is an exit, enter
      * the new room, otherwise print an error message.
      */
-    private void goRoom(Command command) 
+    private void goRoom(Command command)
     {
         if(!command.hasSecondWord()) {
             // if there is no second word, we don't know where to go...
@@ -195,7 +207,7 @@ public class Game
 
         // Try to leave current room.
         Room nextRoom = currentRoom.getExit(direction);
-        
+       
         if(nextRoom == null)
         {
             System.out.println("There is no door");
@@ -208,12 +220,12 @@ public class Game
         }
     }
 
-    /** 
+    /**
      * "Quit" was entered. Check the rest of the command to see
      * whether we really quit the game.
      * @return true, if this command quits the game, false otherwise.
      */
-    private boolean quit(Command command) 
+    private boolean quit(Command command)
     {
         if(command.hasSecondWord()) {
             System.out.println("Quit what?");
@@ -223,16 +235,16 @@ public class Game
             return true;  // signal that we want to quit
         }
     }
-    
+   
     private void pickItem(Command command){
         if(!command.hasSecondWord()){
             System.out.println("Que item queres?");
             return;
         }
-        
+       
         String secondWord = command.getSecondWord();
         Item itemRoom = currentRoom.getItem(secondWord);
-        
+       
         if (itemRoom == null) {
             System.out.println("Esse item nao existe aqui");
             return;
@@ -251,7 +263,7 @@ public class Game
         System.out.println(itemsOfPlayer + "\n" + itemsOfRoom);
 
     }
-    
+   
     private void dropItem(Command command){
         if (!command.hasSecondWord()) {
             // if there is no second word, we don't know where to go...
