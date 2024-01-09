@@ -2,7 +2,6 @@ import java.util.*;
 
 public class Player {
 
-    private int limitItens = 10;
     private int qtdeItens;
     private Item item;
     private HashMap<String, Item> itensOfPlayer = new HashMap<>();
@@ -12,10 +11,10 @@ public class Player {
         updateQtde(name,true);
     }
 
-    public void dropItem(String name){
+    public void dropItem(String name, int qtde){
         itensOfPlayer.get(name).loseItem();
         updateQtde(name,false);
-        if(itensOfPlayer.get(name).getQtdeItens() > 0){
+        if(itensOfPlayer.get(name).getQtdeItens() == 0){
             itensOfPlayer.remove(name);
         }
     }
@@ -45,13 +44,9 @@ public class Player {
 
     private void updateQtde(String name, boolean add){
         if(add){
-            if(qtdeItens == limitItens){
-                System.out.println("sem espaço");
-            }else{
-                qtdeItens +=  itensOfPlayer.get(name).getQtdeItens();
-            }
-
-        }else{
+            qtdeItens +=  itensOfPlayer.get(name).getQtdeItens();
+        }
+        else{
             qtdeItens -=  itensOfPlayer.get(name).getQtdeItens();
         }
 

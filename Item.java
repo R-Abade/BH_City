@@ -4,7 +4,7 @@ public class Item {
 
     private String description;
     private String name;
-    private int qtde;; 
+    private int qtde;
 
     public Item(String description, String name, int qtde){
         this.description = description;
@@ -20,6 +20,10 @@ public class Item {
         qtde++;
     }
 
+    public int getQtdeItem(String name){
+        return qtde;
+    }
+    
     public int getQtdeItens(){
         return qtde;
     }

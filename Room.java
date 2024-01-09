@@ -62,7 +62,7 @@ public class Room {
         return exits.get(direction) != null ? exits.get(direction) : null;
     }
 
-    private String getExitString() {
+    public String getExitString() {
         Set<String> keys = exits.keySet();
         String information = String.join(" ", keys);
         return information;
@@ -80,14 +80,11 @@ public class Room {
         }
         return "Items of room:"+information;
     }
-
-       public void dropItem(Item item)
-    {
-        if(itensOnRoom.get(item).getQtdeItens() > 0){
-            itensOnRoom.remove(item);
-        }
-        else {
-            System.out.println("Nao ha item para remover");
+    
+    public void dropItem(String name){
+        itensOnRoom.get(name).loseItem();
+        if(itensOnRoom.get(name).getQtdeItens() == 0){
+            itensOnRoom.remove(name);
         }
     }
 
